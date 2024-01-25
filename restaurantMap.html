@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DEMO: omise</title>
+  </head>
+  <body>
+    <h1>DEMO: お店のリスト</h1>
+
+    <!-- フィルタリング条件入力 -->
+    <label for="minStars">最低評価：</label>
+    <input type="number" id="minStars" min="0" max="5" step="0.1" />
+    <button id="filterButton">フィルタ</button>
+
+    <!-- お店のリスト -->
+    <div id="omise-container"></div>
+
+    <!-- お店のリストのテンプレート -->
+    <template id="template">
+      <div class="omise-item">
+        <div class="No"></div>
+        <div class="name"></div>
+        <div class="phone"></div>
+        <div class="open"></div>
+        <div class="close"></div>
+        <div class="holiday"></div>
+        <div class="stars"></div>
+      </div>
+    </template>
+
+    <script>
+      window.onload = function () {
+        const minStarsInput = document.getElementById("minStars");
+        const filterButton = document.getElementById("filterButton");
+        const omiseContainer = document.getElementById("omise-container");
+        const template = document.getElementById("template");
+
+        filterButton.addEventListener("click", () => {
+          const minStars = parseFloat(minStarsInput.value);
+
+          // 一旦リストをクリア
+          omiseContainer.innerHTML = "";
+
+          fetch("https://api.sssapi.app/NGWO7DTt7p1N6Ywui1JUm")
+            .then((response) => response.json())
+            .then((data) => {
+              data.forEach((v) => {
+                if (v.stars >= minStars) {
+                  const item = template.content.cloneNode(true);
+                  item.querySelector(".No").textContent = v.No;
+                  item.querySelector(".name").textContent = v.name;
+                  item.querySelector(".phone").textContent = v.phone;
+                  item.querySelector(".open").textContent = v.open;
+                  item.querySelector(".close").textContent = v.close;
+                  item.querySelector(".holiday").textContent = v.holiday;
+                  item.querySelector(".stars").textContent = v.stars;
+                  omiseContainer.appendChild(item);
+                }
+              });
+            });
+        });
+      };
+    </script>
+  </body>
+</html>
